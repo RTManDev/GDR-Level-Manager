@@ -50,3 +50,16 @@ app.post('/api/save', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Endpoint to retrieve all saved data strings
+app.get('/api/load', async (req, res) => {
+  try {
+    // Fetches all entries, newest first
+    const result = await pool.query('SELECT * FROM renders ORDER BY created_at DESC');
+    res.json({ status: 'Success', data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'Database Error' });
+  }
+});
+
